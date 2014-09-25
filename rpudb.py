@@ -41,14 +41,18 @@ def run_telnet_server(addr, port):
     DONT = 254
     IAC = 255
     ECHO = 1
+    SUPPRESS_GO_AHEAD = 3
     LINEMODE = 34
     NAWS = 31
 
     # Telnet Linemode Option (http://tools.ietf.org/html/rfc1184)
-    clientsocket.sendall(bytearray([IAC, WONT, LINEMODE, IAC, WILL, ECHO]))
+    clientsocket.sendall(bytearray([IAC, WILL, ECHO, IAC, WILL, SUPPRESS_GO_AHEAD, IAC, WONT, LINEMODE]))
     buf = clientsocket.recv(3)
     buf = struct.unpack('BBB', buf)
     assert(buf == (IAC, DO, ECHO))
+    buf = clientsocket.recv(3)
+    buf = struct.unpack('BBB', buf)
+    assert(buf == (IAC, DO, SUPPRESS_GO_AHEAD))
 
     # Telnet Window Size Option (https://www.ietf.org/rfc/rfc1073.txt)
     clientsocket.sendall(bytearray([IAC, DO, NAWS]))
