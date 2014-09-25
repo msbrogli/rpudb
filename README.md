@@ -2,6 +2,7 @@ remote pudb
 ===========
 Runs a telnet server and allows controlling the pudb from a remote computer.
 
+
 How to use
 ----------
 In the server:
@@ -13,3 +14,7 @@ In your computer:
 
     telnet localhost 4444
 
+
+How it works
+------------
+It runs pudb in a pseudo-terminal. You connect to this pseudo-terminal through a telnet server.
