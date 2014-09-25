@@ -3,6 +3,12 @@ remote pudb
 Runs a telnet server and allows controlling the pudb from a remote computer.
 
 
+How to install
+--------------
+
+    pip install rpudb
+
+
 How to use
 ----------
 In the server:
