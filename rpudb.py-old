@@ -1,0 +1,52 @@
+import pudb
+import sys
+import socket
+import struct
+import fcntl
+import termios
+import pty
+
+def set_trace(addr='127.0.0.1', port=4444):
+    # Backup stdin and stdout before replacing them by the socket handle
+    old_stdout = sys.stdout
+    old_stdin = sys.stdin
+
+    # Open a 'reusable' socket to let the webapp reload on the same port
+    skt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    skt.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
+    skt.bind((addr, port))
+    skt.listen(1)
+
+    # Writes to stdout are forbidden in mod_wsgi environments
+    try:
+        sys.stderr.write("pudb is running on %s:%d\n" % skt.getsockname())
+    except IOError:
+        pass
+
+    (clientsocket, address) = skt.accept()
+    handle = clientsocket.makefile('rw')
+
+    (master, slave) = pty.openpty()
+
+    width = 143
+    height = 39
+    winsize = struct.pack("HHHH", height, width, 0, 0)
+    fcntl.ioctl(slave, termios.TIOCSWINSZ, winsize)
+
+    buf = fcntl.ioctl(slave, termios.TIOCGWINSZ, ' '*4)
+    y, x = struct.unpack('hh', buf)
+    print '-->', width, height, x, y
+
+    return handle
+    sys.stdout = sys.stdin = handle
+
+    # Telnet Linemode Option
+    # http://tools.ietf.org/html/rfc1184
+    # IAC WONT LINEMODE IAC WILL ECHO
+    sys.stdout.write(bytearray([0377, 0375, 042, 0377, 0373, 01]))
+    sys.stdout.flush()
+
+    pudb.set_trace()
+
+if __name__ == '__main__':
+    set_trace()
