@@ -24,3 +24,8 @@ In your computer:
 How it works
 ------------
 It runs pudb in a pseudo-terminal. You connect to this pseudo-terminal through a telnet server.
+
+
+License
+-------
+Released under the MIT license. Read LICENSE.md for more information.
