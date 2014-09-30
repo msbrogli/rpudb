@@ -9,4 +9,5 @@ setup(name='rpudb',
     long_description=open('README.md').read(),
     packages=['rpudb'],
     url='https://github.com/msbrogli/rpudb',
+    install_requires=['pudb'],
 )
