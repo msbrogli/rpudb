@@ -1,8 +1,8 @@
 from distutils.core import setup
 
 setup(name='rpudb',
-    version='0.0.1',
-    license='Unknown',
+    version='0.0.3',
+    license='MIT',
     author='Marcelo Salhab Brogliato',
     author_email='msbrogli@vialink.com.br',
     description='Remote pudb',
