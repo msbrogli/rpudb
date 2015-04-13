@@ -64,7 +64,7 @@ def run_telnet_server(addr, port):
     if pid == 0:
         strIAC = struct.pack('BBB', IAC, SB, NAWS)
         inputs = [clientsocket, term_master]
-        print 'Mainloop'
+        print('Mainloop')
         while True:
             readable, _, _ = select.select(inputs, [], [])
             s = readable[0]
@@ -104,7 +104,7 @@ def set_trace(addr='127.0.0.1', port=4444):
 
     # Kill children on exit.
     def cleanup():
-        print 'Killing server...'
+        print('Killing server...')
         os.kill(pid, signal.SIGKILL)
     atexit.register(cleanup)
     def signal_handler(signal, frame):
